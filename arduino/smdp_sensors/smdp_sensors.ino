@@ -35,7 +35,7 @@
  * SOL / CUBIERTA DE EDIFICIOS
  *   A0   LDR sur
  *   A2   LDR norte
- *   D13  Motor/relé de la cubierta (HIGH = cubrir)
+ *   D11  Motor/relé de la cubierta (HIGH = cubrir)
  *
  * ENERGÍA
  *   A4   Voltaje de los paneles solares (0-5 V en el pin)
@@ -78,10 +78,10 @@ const uint8_t PIN_ENERGY_SOLAR = 8;
 const uint8_t PIN_ENERGY_WIND = 9;
 const uint8_t PIN_ENERGY_WASTE = 10;
 
-const uint8_t PIN_POST_NORTH = 11;
-const uint8_t PIN_POST_SOUTH = 12;
+const uint8_t PIN_POST_NORTH = -1;
+const uint8_t PIN_POST_SOUTH = -2;
 
-const uint8_t PIN_COVER_MOTOR = 13;
+const uint8_t PIN_COVER_MOTOR = 11;
 
 // ---------------------------------------------------------------------------
 // Pines analógicos

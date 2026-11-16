@@ -9,14 +9,14 @@ Incluye un **modo demo** que genera lecturas realistas sin necesidad de hardware
 
 ## Categorías y decisiones
 
-| Categoría        | Lecturas del Arduino                          | Decisión devuelta                |
-| ---------------- | --------------------------------------------- | -------------------------------- |
-| Energía          | solar y eólica (kW + voltaje), residuos (kW)  | `solar`, `eolica` o `residuos`   |
-| Semáforo         | ocupación vertical y horizontal               | `rojo`, `amarillo` o `verde`     |
-| Sol / Cubierta   | radiación norte y sur                         | `cubrir` o `libre`               |
-| Temperatura      | ambiente (°C) y humedad (%)                   | `frio` o `caliente`              |
-| Agua             | nivel del depósito (%)                        | `bajo`, `full` o `normal`        |
-| Poste            | se deriva de la radiación solar               | `encender` o `apagar`            |
+| Categoría      | Lecturas del Arduino                         | Decisión devuelta              |
+| -------------- | -------------------------------------------- | ------------------------------ |
+| Energía        | solar y eólica (kW + voltaje), residuos (kW) | `solar`, `eolica` o `residuos` |
+| Semáforo       | ocupación vertical y horizontal              | `rojo`, `amarillo` o `verde`   |
+| Sol / Cubierta | radiación norte y sur                        | `cubrir` o `libre`             |
+| Temperatura    | ambiente (°C) y humedad (%)                  | `frio` o `caliente`            |
+| Agua           | nivel del depósito (%)                       | `bajo`, `full` o `normal`      |
+| Poste          | se deriva de la radiación solar              | `encender` o `apagar`          |
 
 Reglas locales de respaldo (se usan si Gemini no está disponible):
 
@@ -24,7 +24,7 @@ Reglas locales de respaldo (se usan si Gemini no está disponible):
   las tres potencias, el voltaje de solar/eólica y el total en kW.
 - **Semáforo:** ambos sensores ocupados → `rojo`; solo uno ocupado → `amarillo`; ninguno →
   `verde`. El semáforo físico tiene tres luces (D3 roja, D4 amarilla y D5 verde).
-- **Sol / Cubierta:** radiación máxima ≥ 60 % → `cubrir` (motor D13 activo); si no, `libre`.
+- **Sol / Cubierta:** radiación máxima ≥ 60 % → `cubrir` (motor D11 activo); si no, `libre`.
 - **Temperatura:** ≥ 26 °C → `caliente`; por debajo → `frio`.
 - **Agua:** < 25 % → `bajo`; ≥ 85 % → `full`; resto → `normal`.
 - **Poste:** radiación máxima < 35 % (noche o nubosidad densa) → `encender`; si no, `apagar`.
@@ -68,26 +68,25 @@ de energía y los postes.
 
 ## Mapa de pines del sketch
 
-| Pin       | Función                                                        |
-| --------- | -------------------------------------------------------------- |
-| `D2`      | Sensor de ocupación vertical (`INPUT_PULLUP`, LOW = ocupado)   |
-| `D6`      | Sensor de ocupación horizontal (`INPUT_PULLUP`, LOW = ocupado) |
-| `D3`      | Luz roja del semáforo                                          |
-| `D4`      | Luz amarilla del semáforo                                      |
-| `D5`      | Luz verde del semáforo                                         |
-| `D8`      | Indicador de energía solar en uso                              |
-| `D9`      | Indicador de energía eólica en uso                             |
-| `D10`     | Indicador de energía de residuos en uso                        |
-| `D11`     | Poste norte                                                    |
-| `D12`     | Poste sur                                                      |
-| `D13`     | Motor/relé de la cubierta de edificios                         |
-| `A0`      | LDR sur                                                        |
-| `A1`      | Temperatura y humedad (DHT11/DHT22 o TMP36 analógico)          |
-| `A2`      | LDR norte                                                      |
-| `A4`      | Voltaje entregado por los paneles solares                      |
-| `A5`      | Sensor de nivel de agua                                        |
-| `A6`      | Voltaje de la eólica (Nano)                                    |
-| `A3`      | Alternativa para la eólica en Arduino UNO (no existe A6)       |
+| Pin   | Función                                                        |
+| ----- | -------------------------------------------------------------- |
+| `D2`  | Sensor de ocupación vertical (`INPUT_PULLUP`, LOW = ocupado)   |
+| `D6`  | Sensor de ocupación horizontal (`INPUT_PULLUP`, LOW = ocupado) |
+| `D3`  | Luz roja del semáforo                                          |
+| `D4`  | Luz amarilla del semáforo                                      |
+| `D5`  | Luz verde del semáforo                                         |
+| `D8`  | Indicador de energía solar en uso                              |
+| `D9`  | Indicador de energía eólica en uso                             |
+| `D10` | Indicador de energía de residuos en uso                        |
+| `D11` | Motor/relé de la cubierta de edificios                         |
+| `D12` | Libre / Poste sur (opcional)                                   |
+| `A0`  | LDR sur                                                        |
+| `A1`  | Temperatura y humedad (DHT11/DHT22 o TMP36 analógico)          |
+| `A2`  | LDR norte                                                      |
+| `A4`  | Voltaje entregado por los paneles solares                      |
+| `A5`  | Sensor de nivel de agua                                        |
+| `A6`  | Voltaje de la eólica (Nano)                                    |
+| `A3`  | Alternativa para la eólica en Arduino UNO (no existe A6)       |
 
 Notas de conexión:
 
@@ -241,6 +240,27 @@ npm run build:mac
 ```
 
 El empaquetado incluye los binarios nativos de `serialport`.
+
+### Release automático para Windows (GitHub Actions)
+
+El repositorio incluye un flujo de trabajo en `.github/workflows/release-windows.yml` que compila y publica automáticamente el instalador de Windows (`citynexus-<version>-setup.exe`):
+
+1. **Por etiqueta Git (recomendado):**
+   Crea y empuja una etiqueta que comience por `v` (por ejemplo, `v1.0.0`):
+
+   ```bash
+   git tag v1.0.0
+   git push origin v1.0.0
+   ```
+
+   La acción compilará la versión para Windows, generará las notas de la versión automáticamente y adjuntará el instalador NSIS en la sección **Releases** de GitHub.
+
+2. **Ejecución manual (workflow_dispatch):**
+   Ve a la pestaña **Actions** en GitHub, selecciona **Release Windows Build** y pulsa **Run workflow**. Puedes configurar:
+   - `create_release`: Si se debe crear la release en GitHub (por defecto `true`).
+   - `tag_name`: Etiqueta personalizada o dejar en blanco para usar la versión de `package.json`.
+   - `draft` y `prerelease`: Marcar como borrador o pre-release si es necesario.
+   - El instalador compilado también estará disponible para su descarga en la sección **Artifacts** de la ejecución.
 
 ## Problemas frecuentes
 

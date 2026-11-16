@@ -28,7 +28,7 @@ export default function SunPanel({ data, decision }) {
         <div className="sc-panel__title">
           <div>
             <h3>Radiación Solar</h3>
-            <p>LDR sur A0 · LDR norte A2 · motor D13</p>
+            <p>LDR sur A0 · LDR norte A2 · motor D11</p>
           </div>
         </div>
         <span className="sc-chip">{hasData ? `Posición: ${sun.position}` : 'Sin datos'}</span>
@@ -67,7 +67,7 @@ export default function SunPanel({ data, decision }) {
         {!hasData
           ? 'Conecta el Arduino o activa el modo demo para conocer la radiación solar.'
           : advise === 'cubrir'
-            ? 'Radiación alta: se activa el motor D13 y se despliega la cubierta de los edificios.'
+            ? 'Radiación alta: se activa el motor D11 y se despliega la cubierta de los edificios.'
             : 'Radiación baja: la cubierta permanece retirada y los edificios quedan descubiertos.'}
       </p>
     </section>
