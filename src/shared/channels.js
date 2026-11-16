@@ -1,0 +1,20 @@
+export const CHANNELS = {
+  appInfo: 'app:info',
+  serialList: 'serial:list',
+  serialConnect: 'serial:connect',
+  serialDisconnect: 'serial:disconnect',
+  serialDemoStart: 'serial:demo-start',
+  serialDemoStop: 'serial:demo-stop',
+  serialSend: 'serial:send',
+  serialSample: 'serial:sample',
+  serialStatus: 'serial:status',
+  settingsGet: 'settings:get',
+  settingsSave: 'settings:save',
+  geminiDecide: 'gemini:decide',
+  geminiChat: 'gemini:chat',
+  geminiCancel: 'gemini:cancel',
+  geminiChunk: 'gemini:chunk',
+  geminiDone: 'gemini:done',
+  geminiError: 'gemini:error',
+  geminiCancelled: 'gemini:cancelled'
+}
